@@ -37,6 +37,7 @@ LaunchedEffect(key1 = true){
                     popUpTo(navController.graph.findStartDestination().id){
                         inclusive=true
 
+
                     }
                 }
             }
