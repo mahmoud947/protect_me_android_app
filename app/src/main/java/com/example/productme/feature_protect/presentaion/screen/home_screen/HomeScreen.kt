@@ -7,10 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Security
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -21,8 +18,11 @@ import com.example.curativepis.ui.theme.spacing
 import com.example.productme.R
 import com.example.productme.core.presentaion.components.ButtonWithElevation
 import com.example.productme.core.presentaion.components.DefaultTopAppBar
+import com.example.productme.core.presentaion.navigation.Screens
+import com.example.productme.ui.theme.darkBlue
 import com.example.productme.ui.theme.green
 import com.example.productme.ui.theme.orange
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 
 @Composable
@@ -42,6 +42,14 @@ fun HomeScreen(
     } else {
         stateText.value = "OFF"
     }
+    val systemUiController = rememberSystemUiController()
+    val color = MaterialTheme.colors.primary
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = color,
+            darkIcons = false
+        )
+    }
 
     val scope = rememberCoroutineScope()
     Column(
@@ -57,7 +65,7 @@ fun HomeScreen(
         },
             title = stringResource(id = R.string.home_screen_app_bar_text))
 
-        Spacer(modifier = Modifier.height(MaterialTheme.spacing.regulator))
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
         Box(modifier = Modifier
             .fillMaxWidth()
@@ -103,7 +111,9 @@ fun HomeScreen(
             modifier = Modifier
                 .height(MaterialTheme.spacing.smallButtonH)
                 .width(MaterialTheme.spacing.smallButtonX),
-            onClick = { /*TODO*/ },
+            onClick = {
+                      navController.navigate(route = Screens.GuardsScreen.route)
+            },
             text = stringResource(id = R.string.my_guards_btn),
             startIcon = Icons.Default.Security
         )

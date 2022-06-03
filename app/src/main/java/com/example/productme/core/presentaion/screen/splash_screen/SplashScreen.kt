@@ -7,6 +7,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -22,6 +23,7 @@ import com.example.productme.core.presentaion.navigation.Screens
 import com.example.productme.core.presentaion.screen.splash_screen.view_model.SplashScreenViewModel
 import com.example.productme.ui.theme.darkBlue
 import com.example.productme.ui.theme.orange
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.collect
 
 @Composable
@@ -29,8 +31,16 @@ fun SplashScreen(
     navController: NavController,
     viewModel: SplashScreenViewModel = hiltViewModel(),
 ) {
+    val systemUiController = rememberSystemUiController()
+    val color = darkBlue
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = color,
+            darkIcons = false
+        )
+    }
 
-LaunchedEffect(key1 = true){
+    LaunchedEffect(key1 = true){
     viewModel.actionEventChannel.collect{event->
         when(event){
             is SplashScreenViewModel.ActionEvent.NavigateToHome->{

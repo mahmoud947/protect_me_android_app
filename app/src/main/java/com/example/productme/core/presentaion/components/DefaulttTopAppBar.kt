@@ -16,7 +16,7 @@ import com.example.curativepis.ui.theme.spacing
 @Composable
 fun DefaultTopAppBar(
     navigationIcon: ImageVector = Icons.Filled.Menu,
-    onClick: () -> Unit,
+    onClick: () -> Unit ={},
     title:String
 ) {
     androidx.compose.material.TopAppBar(
@@ -33,7 +33,7 @@ fun DefaultTopAppBar(
                 },
             ) {
                 Icon(imageVector = navigationIcon,
-                    contentDescription = "back Icon")
+                    contentDescription = "back Icon", tint = MaterialTheme.colors.onPrimary)
 
             }
         }

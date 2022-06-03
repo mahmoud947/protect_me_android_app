@@ -3,4 +3,7 @@
     <string name="splash_screen_fotter">PROTECT.ME</string>
     <string name="home_screen_app_bar_text">Protect me</string>
     <string name="my_guards_btn">My guards</string>
+    <string name="guards_screen_app_bar_text">My Guards</string>
+    <string name="guard_card_name">Name</string>
+    <string name="guard_card_phone">Phone</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.curativepis.core.presentation.components
+package com.example.productme.core.presentaion.components
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -20,18 +21,19 @@ fun DefaultTextField(
     value: String,
     label: String,
     onTextChange: (String) -> Unit = {},
-    pading: PaddingValues = PaddingValues(horizontal = MaterialTheme.spacing.medium),
+    padding: PaddingValues = PaddingValues(horizontal = MaterialTheme.spacing.medium),
     keyboardOptions: KeyboardOptions = KeyboardOptions(
         keyboardType = KeyboardType.Email
     ),
     isError: Boolean = false,
     isPasswordTextField: Boolean = false,
+    TrailingIcon:ImageVector?
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(pading),
+            .padding(padding),
         value = value, onValueChange = {
             onTextChange(it)
         }, label = { Text(text = label, style = MaterialTheme.typography.caption) },
@@ -53,6 +55,10 @@ fun DefaultTextField(
 
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
                     Icon(imageVector = image, description)
+                }
+            }else{
+                if (TrailingIcon != null) {
+                    Icon(imageVector = TrailingIcon, contentDescription =null )
                 }
             }
         },
