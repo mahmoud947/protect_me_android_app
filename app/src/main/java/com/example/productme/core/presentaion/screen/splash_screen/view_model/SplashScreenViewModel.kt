@@ -3,16 +3,21 @@ package com.example.productme.core.presentaion.screen.splash_screen.view_model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.productme.core.comm.Constants
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+@HiltViewModel
 class SplashScreenViewModel @Inject constructor() : ViewModel() {
 
     private val _actionEventChannel = Channel<ActionEvent>()
     val actionEventChannel=_actionEventChannel.receiveAsFlow()
+
+    init {
+        navigate()
+    }
 
     private fun navigate(){
         viewModelScope.launch {

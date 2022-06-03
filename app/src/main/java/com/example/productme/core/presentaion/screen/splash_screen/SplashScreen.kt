@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.curativepis.ui.theme.spacing
 import com.example.productme.R
+import com.example.productme.core.presentaion.navigation.Screens
 import com.example.productme.core.presentaion.screen.splash_screen.view_model.SplashScreenViewModel
 import com.example.productme.ui.theme.darkBlue
 import com.example.productme.ui.theme.orange
@@ -33,7 +34,7 @@ LaunchedEffect(key1 = true){
     viewModel.actionEventChannel.collect{event->
         when(event){
             is SplashScreenViewModel.ActionEvent.NavigateToHome->{
-                navController.navigate(""){
+                navController.navigate(route = Screens.HomeScreen.route){
                     popUpTo(navController.graph.findStartDestination().id){
                         inclusive=true
                     }

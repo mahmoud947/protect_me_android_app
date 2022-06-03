@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.productme.core.presentaion.Screens
 import com.example.productme.core.presentaion.screen.splash_screen.SplashScreen
+import com.example.productme.feature_protect.presentaion.screen.home_screen.HomeScreen
 
 @Composable
 fun MyNavGraph(scaffoldState:ScaffoldState,navController: NavHostController) {
@@ -17,6 +17,12 @@ fun MyNavGraph(scaffoldState:ScaffoldState,navController: NavHostController) {
 
         composable(route = Screens.SplashScreen.route){
             SplashScreen(navController = navController)
+        }
+        composable(route = Screens.HomeScreen.route){
+            HomeScreen(
+                navController = navController,
+                scaffoldState = scaffoldState
+            )
         }
     }
 

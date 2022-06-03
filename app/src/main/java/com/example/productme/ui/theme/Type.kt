@@ -17,5 +17,10 @@ val Typography = Typography(
         fontWeight = FontWeight.SemiBold,
         fontSize = 34.sp,
         letterSpacing = 0.25.sp
-    )
+    ),
+    h6 = TextStyle(
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 20.sp,
+        letterSpacing = 0.15.sp
+    ),
 )
