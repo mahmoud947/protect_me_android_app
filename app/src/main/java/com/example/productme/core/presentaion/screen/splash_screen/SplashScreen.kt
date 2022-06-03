@@ -36,8 +36,6 @@ LaunchedEffect(key1 = true){
                 navController.navigate(""){
                     popUpTo(navController.graph.findStartDestination().id){
                         inclusive=true
-
-
                     }
                 }
             }
