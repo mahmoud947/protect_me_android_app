@@ -1,5 +1,6 @@
 package com.example.productme.feature_protect.presentaion.screen.home_screen
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -10,6 +11,7 @@ import androidx.compose.material.icons.filled.Security
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -19,6 +21,8 @@ import com.example.productme.R
 import com.example.productme.core.presentaion.components.ButtonWithElevation
 import com.example.productme.core.presentaion.components.DefaultTopAppBar
 import com.example.productme.core.presentaion.navigation.Screens
+import com.example.productme.service.ptotect_me.service.ProtectMeServiceComm
+import com.example.productme.service.ptotect_me.utils.sendCommandToService
 import com.example.productme.ui.theme.darkBlue
 import com.example.productme.ui.theme.green
 import com.example.productme.ui.theme.orange
@@ -29,7 +33,9 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     navController: NavController,
     scaffoldState: ScaffoldState,
+    context: Context
 ) {
+    val contextt= LocalContext.current
     val isDarkMode = isSystemInDarkTheme()
     val isServiceRun = remember {
         mutableStateOf(false)
@@ -50,6 +56,7 @@ fun HomeScreen(
             darkIcons = false
         )
     }
+
 
     val scope = rememberCoroutineScope()
     Column(
@@ -99,6 +106,10 @@ fun HomeScreen(
                 .align(Alignment.Start),
             checked = isServiceRun.value, onCheckedChange = {
                 isServiceRun.value = !isServiceRun.value
+                if (isServiceRun.value){
+                   contextt.sendCommandToService(ProtectMeServiceComm.ACTION_START_OR_RESUME_SERVICE)
+                }
+
             },
             colors = SwitchDefaults.colors(
                 checkedThumbColor = green,
@@ -112,7 +123,8 @@ fun HomeScreen(
                 .height(MaterialTheme.spacing.smallButtonH)
                 .width(MaterialTheme.spacing.smallButtonX),
             onClick = {
-                      navController.navigate(route = Screens.GuardsScreen.route)
+                      //navController.navigate(route = Screens.GuardsScreen.route)
+                contextt.sendCommandToService(ProtectMeServiceComm.ACTION_START_OR_RESUME_SERVICE)
             },
             text = stringResource(id = R.string.my_guards_btn),
             startIcon = Icons.Default.Security

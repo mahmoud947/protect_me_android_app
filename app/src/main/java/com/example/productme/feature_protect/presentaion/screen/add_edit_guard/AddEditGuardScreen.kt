@@ -10,9 +10,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,8 +20,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.curativepis.ui.theme.spacing
 import com.example.productme.R
+import com.example.productme.core.presentaion.components.ButtonWithElevation
 import com.example.productme.core.presentaion.components.DefaultTextField
 import com.example.productme.core.presentaion.components.DefaultTopAppBar
+import com.example.productme.core.presentaion.navigation.Screens
 import com.example.productme.feature_protect.presentaion.components.GuardCard
 
 @Composable
@@ -69,6 +69,17 @@ fun AddEditGuardScreen(
         DefaultTextField(value = name, label ="Guard Name", TrailingIcon = Icons.Default.Person, onTextChange = { name=it })
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
         DefaultTextField(value = phone, label ="Guard Phone", TrailingIcon = Icons.Default.Phone, onTextChange = {phone=it})
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
+        ButtonWithElevation(
+            modifier = Modifier
+                .height(MaterialTheme.spacing.smallButtonH)
+                .width(MaterialTheme.spacing.smallButtonX),
+            onClick = {
+                navController.navigate(route = Screens.GuardsScreen.route)
+            },
+            text = stringResource(id = R.string.add_edit_guard_btn),
+            startIcon = Icons.Default.PersonAdd
+        )
 
 
     }

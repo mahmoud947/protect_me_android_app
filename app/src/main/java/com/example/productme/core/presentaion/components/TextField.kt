@@ -45,6 +45,7 @@ fun DefaultTextField(
         ),
         isError = isError,
         keyboardOptions = keyboardOptions,
+        singleLine = true,
 
         trailingIcon = {
             if (isPasswordTextField) {

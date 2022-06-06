@@ -1,5 +1,6 @@
 package com.example.productme.core.presentaion.navigation
 
+import android.content.Context
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -11,7 +12,7 @@ import com.example.productme.feature_protect.presentaion.screen.guardsScreen.Gua
 import com.example.productme.feature_protect.presentaion.screen.home_screen.HomeScreen
 
 @Composable
-fun MyNavGraph(scaffoldState:ScaffoldState,navController: NavHostController) {
+fun MyNavGraph(scaffoldState:ScaffoldState,navController: NavHostController,context: Context) {
     NavHost(
         navController = navController,
         startDestination = Screens.SplashScreen.route
@@ -23,7 +24,8 @@ fun MyNavGraph(scaffoldState:ScaffoldState,navController: NavHostController) {
         composable(route = Screens.HomeScreen.route){
             HomeScreen(
                 navController = navController,
-                scaffoldState = scaffoldState
+                scaffoldState = scaffoldState,
+                context = context
             )
         }
         composable(route = Screens.GuardsScreen.route){

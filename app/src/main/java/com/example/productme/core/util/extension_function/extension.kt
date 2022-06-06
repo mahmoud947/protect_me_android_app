@@ -1,4 +1,4 @@
-package com.example.curativepis.core.util.extension_function
+package com.example.productme.core.util.extension_function
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.lazy.*

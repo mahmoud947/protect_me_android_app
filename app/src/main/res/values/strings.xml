@@ -6,4 +6,5 @@
     <string name="guards_screen_app_bar_text">My Guards</string>
     <string name="guard_card_name">Name</string>
     <string name="guard_card_phone">Phone</string>
+    <string name="add_edit_guard_btn">Add</string>
 </resources>
