@@ -69,6 +69,7 @@ class ProtectMeService:Service() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel(notificationManager = notificationManager)
+            
         }
         val notificationBuild = NotificationCompat.Builder(
             this, NOTIFICATION_CHANNEL_ID
