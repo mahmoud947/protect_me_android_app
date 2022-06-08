@@ -1,6 +1,6 @@
 package com.example.productme.feature_protect.presentaion.screen.home_screen
 
-import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -15,11 +15,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.curativepis.ui.theme.spacing
 import com.example.productme.R
 import com.example.productme.core.presentaion.components.ButtonWithElevation
 import com.example.productme.core.presentaion.components.DefaultTopAppBar
+import com.example.productme.core.presentaion.navigation.Screens
+import com.example.productme.feature_protect.presentaion.screen.add_edit_guard.AddEditGuardViewModel
 import com.example.productme.service.protect_me.utils.ProtectMeServiceComm
 import com.example.productme.service.protect_me.utils.sendCommandToService
 import com.example.productme.ui.theme.green
@@ -31,17 +34,15 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     navController: NavController,
     scaffoldState: ScaffoldState,
-    context: Context
+    viewModel: HomeScreenViewModel = hiltViewModel(),
 ) {
-    val contextt= LocalContext.current
+    val state = viewModel.uiState
+    val context = LocalContext.current
     val isDarkMode = isSystemInDarkTheme()
-    val isServiceRun = remember {
-        mutableStateOf(false)
-    }
     val stateText = remember {
         mutableStateOf("ON")
     }
-    if (isServiceRun.value) {
+    if (state.isServiceEnable) {
         stateText.value = "ON"
     } else {
         stateText.value = "OFF"
@@ -55,8 +56,25 @@ fun HomeScreen(
         )
     }
 
-
     val scope = rememberCoroutineScope()
+
+
+
+    LaunchedEffect(key1 = true) {
+        viewModel.validationEvent.collect { event ->
+            when (event) {
+                is HomeScreenViewModel.UiEvent.StartService -> {
+                    context.sendCommandToService(ProtectMeServiceComm.ACTION_START_OR_RESUME_SERVICE)
+                }
+                is HomeScreenViewModel.UiEvent.StopService -> {
+                    context.sendCommandToService(ProtectMeServiceComm.ACTION_STOP_SERVICE)
+                }
+            }
+        }
+    }
+
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -94,7 +112,7 @@ fun HomeScreen(
                 color = MaterialTheme.colors.onBackground)
             Text(text = stateText.value,
                 style = MaterialTheme.typography.h5,
-                color = if (isServiceRun.value) green else orange)
+                color = if (state.isServiceEnable) green else orange)
         }
 
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
@@ -102,12 +120,8 @@ fun HomeScreen(
             modifier = Modifier
                 .padding(start = MaterialTheme.spacing.medium)
                 .align(Alignment.Start),
-            checked = isServiceRun.value, onCheckedChange = {
-                isServiceRun.value = !isServiceRun.value
-                if (isServiceRun.value){
-                   contextt.sendCommandToService(ProtectMeServiceComm.ACTION_START_OR_RESUME_SERVICE)
-                }
-
+            checked = state.isServiceEnable, onCheckedChange = {
+                viewModel.onEvent(HomeScreenEvent.ChangeServiceState)
             },
             colors = SwitchDefaults.colors(
                 checkedThumbColor = green,
@@ -121,12 +135,14 @@ fun HomeScreen(
                 .height(MaterialTheme.spacing.smallButtonH)
                 .width(MaterialTheme.spacing.smallButtonX),
             onClick = {
-                      //navController.navigate(route = Screens.GuardsScreen.route)
-                contextt.sendCommandToService(ProtectMeServiceComm.ACTION_START_OR_RESUME_SERVICE)
+                navController.navigate(route = Screens.GuardsScreen.route)
+
             },
             text = stringResource(id = R.string.my_guards_btn),
             startIcon = Icons.Default.Security
         )
 
     }
+
+
 }

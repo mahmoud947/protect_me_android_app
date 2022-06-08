@@ -19,8 +19,10 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.example.productme.R
 import com.example.productme.core.util.network.ConnectivityLiveData
+import com.example.productme.feature_protect.domain.model.Guard
+import com.example.productme.feature_protect.domain.use_case.ProtectMeUseCases
+import com.example.productme.service.protect_me.data.remote.request.SendMessageReqBody
 import com.example.productme.service.protect_me.domain.repository.ProtectMeServiceRepository
-import com.example.productme.service.protect_me.utils.ProtectMeServiceComm
 import com.example.productme.service.protect_me.utils.ProtectMeServiceComm.ACTION_PAUSE_SERVICE
 import com.example.productme.service.protect_me.utils.ProtectMeServiceComm.ACTION_START_OR_RESUME_SERVICE
 import com.example.productme.service.protect_me.utils.ProtectMeServiceComm.ACTION_STOP_SERVICE
@@ -29,13 +31,18 @@ import com.example.productme.service.protect_me.utils.ProtectMeServiceComm.NOTIF
 import com.example.productme.service.protect_me.utils.ProtectMeServiceComm.NOTIFICATION_ID
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
-import java.io.IOException
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProtectMeService : LifecycleService() {
     private val scope = CoroutineScope(Dispatchers.IO)
-    private var job= Job()
+    private var job: Job? = null
+    private var job2: Job? = null
+    private var job3: Job? = null
+
+    private lateinit var guard: List<Guard>
 
     @Inject
     lateinit var repository: ProtectMeServiceRepository
@@ -43,9 +50,17 @@ class ProtectMeService : LifecycleService() {
     @Inject
     lateinit var cld: ConnectivityLiveData
 
+    @Inject
+    lateinit var useCases: ProtectMeUseCases
+
     override fun onCreate() {
         super.onCreate()
         cld = ConnectivityLiveData(application)
+
+        useCases.getGuardsUseCase().onEach { guards ->
+            guard = guards
+        }.launchIn(lifecycleScope)
+
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -55,8 +70,6 @@ class ProtectMeService : LifecycleService() {
                     Log.d("ProService", "started or resume service")
 
                     checkConnection()
-
-
                     startForegroundService()
                 }
                 ACTION_PAUSE_SERVICE -> {
@@ -65,6 +78,7 @@ class ProtectMeService : LifecycleService() {
                 ACTION_STOP_SERVICE -> {
                     Log.d("ProService", "stop service")
                     stopService()
+                    return START_NOT_STICKY
                 }
                 else -> null
             }
@@ -147,8 +161,10 @@ class ProtectMeService : LifecycleService() {
             // network is available for use
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
-                Toast.makeText(this@ProtectMeService, "wifi is connected", Toast.LENGTH_SHORT).show()
-                //sendMessage()
+                Toast.makeText(this@ProtectMeService, "wifi is connected", Toast.LENGTH_SHORT)
+                    .show()
+                job?.cancel()
+                job=scope.launch { sendMessage()}
             }
 
             // Network capabilities have changed for the network
@@ -159,8 +175,8 @@ class ProtectMeService : LifecycleService() {
                 super.onCapabilitiesChanged(network, networkCapabilities)
                 val unmetered =
                     networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
-                Toast.makeText(this@ProtectMeService, "network is change", Toast.LENGTH_SHORT)
-                    .show()
+//                Toast.makeText(this@ProtectMeService, "network is change", Toast.LENGTH_SHORT)
+//                    .show()
                 //sendMessage()
             }
 
@@ -168,7 +184,10 @@ class ProtectMeService : LifecycleService() {
             override fun onLost(network: Network) {
                 super.onLost(network)
                 Toast.makeText(this@ProtectMeService, "wifi is lost", Toast.LENGTH_SHORT).show()
-                sendMessage()
+                job?.cancel()
+               job= scope.launch {
+                    sendMessage()
+                }
             }
         }
         val connectivityManager =
@@ -177,24 +196,27 @@ class ProtectMeService : LifecycleService() {
 
     }
 
-    private fun sendMessage() {
+    private suspend fun sendMessage() {
+        try {
+            guard.forEach {
+                val sendMessageReqBody = SendMessageReqBody(
+                    To = "whatsapp:+2${it.phone}",
+                    From = "whatsapp:+14155238886",
+                    Body = "this message sent from an android service please send `join pull-rubber` to continue receiving messages "
+                )
+                    repository.sendMessage(sendMessageReqBody = sendMessageReqBody)
+                    showCastumNotification(title = "service is trying to send messages",
+                        "sent successfully to ${it.phone}")
 
-       lifecycleScope.launch(job) {
-                try {
-                    while (true) {
-                        repository.sendMessage(ProtectMeServiceComm.sentMessageReqBody)
-                        showCastumNotification(title = "service is try to sent",
-                            "it sent successfully")
-                        delay(1000 * 60 * 60 * 5)
-                    }
-                } catch (e: Exception) {
-                        showCastumNotification(title = "service is try to sent",
-                            "please check your enter net connection ")
-                        delay(1000 * 20)
-                        sendMessage()
-                }
-
-        }.start()
+            }
+        } catch (e: Exception) {
+            scope.launch {
+                showCastumNotification(title = "service is trying to send messages",
+                    "an error occurred please check your internet connection ")
+                delay(1000 * 10)
+                sendMessage()
+            }
+        }
 
     }
 

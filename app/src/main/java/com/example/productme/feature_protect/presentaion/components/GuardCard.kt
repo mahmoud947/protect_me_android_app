@@ -22,6 +22,8 @@ import com.example.productme.ui.theme.green
 fun GuardCard(
     modifier: Modifier = Modifier,
     guard: Guard,
+    onDeleteClick:()->Unit={},
+    onEditClick:()->Unit={}
 ) {
     Card(
         contentColor = MaterialTheme.colors.surface,
@@ -36,39 +38,12 @@ fun GuardCard(
                 .fillMaxSize()
                 .padding(MaterialTheme.spacing.small)
                 .background(MaterialTheme.colors.surface)
-                .padding(horizontal = MaterialTheme.spacing.large, vertical = MaterialTheme.spacing.regulator)
+                .padding(horizontal = MaterialTheme.spacing.large,
+                    vertical = MaterialTheme.spacing.regulator)
                 .clip(MaterialTheme.shapes.large),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colors.surface),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
-
-            ) {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = null,
-                        tint = green,
-                        modifier = Modifier.align(CenterVertically)
-                    )
-                }
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.large))
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = null,
-                        tint = MaterialTheme.colors.error
-                    )
-                }
-
-            }
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -95,6 +70,14 @@ fun GuardCard(
                 Text(text = guard.phone,
                     style = MaterialTheme.typography.body1,
                     color = MaterialTheme.colors.onSurface)
+            }
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+            IconButton(onClick = onDeleteClick) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = null,
+                    tint = MaterialTheme.colors.error
+                )
             }
 
         }

@@ -18,28 +18,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.curativepis.ui.theme.spacing
 import com.example.productme.R
 import com.example.productme.core.presentaion.components.DefaultTopAppBar
 import com.example.productme.core.presentaion.navigation.Screens
-import com.example.productme.feature_protect.domain.model.Guard
 import com.example.productme.feature_protect.presentaion.components.GuardCard
 
 @Composable
 fun GuardsScreen(
     navController: NavController,
     scaffoldState: ScaffoldState,
+    viewModel: GuardsScreenViewModel = hiltViewModel(),
 ) {
-    val dameGuards = listOf(
-        Guard(1, "guard 1", "01112000001"),
-        Guard(2, "guard 2", "01112000002"),
-        Guard(3, "guard 3", "01112000003"),
-        Guard(4, "guard 4", "01112000004"),
-        Guard(5, "guard 5", "01112000005"),
-        Guard(6, "guard 6", "01112000006"),
-        Guard(7, "guard 7", "01112000007"),
-    )
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -78,8 +70,11 @@ fun GuardsScreen(
                 contentPadding = PaddingValues(all = MaterialTheme.spacing.regulator),
                 modifier = Modifier.background(MaterialTheme.colors.background)
             ) {
-                items(items = dameGuards) { guard ->
-                    GuardCard(guard = guard)
+                items(items = viewModel.uiState.guards) { guard ->
+                    GuardCard(
+                        guard = guard,
+                        onDeleteClick = { viewModel.onEvent(GuardsScreenEvent.DeleteGuard(guard = guard)) }
+                    )
                 }
             }
 

@@ -4,9 +4,12 @@ import android.content.Context
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.productme.core.presentaion.screen.splash_screen.SplashScreen
+import com.example.productme.feature_protect.domain.model.Guard
 import com.example.productme.feature_protect.presentaion.screen.add_edit_guard.AddEditGuardScreen
 import com.example.productme.feature_protect.presentaion.screen.guardsScreen.GuardsScreen
 import com.example.productme.feature_protect.presentaion.screen.home_screen.HomeScreen
@@ -25,7 +28,6 @@ fun MyNavGraph(scaffoldState:ScaffoldState,navController: NavHostController,cont
             HomeScreen(
                 navController = navController,
                 scaffoldState = scaffoldState,
-                context = context
             )
         }
         composable(route = Screens.GuardsScreen.route){
@@ -37,7 +39,7 @@ fun MyNavGraph(scaffoldState:ScaffoldState,navController: NavHostController,cont
         composable(route = Screens.AddEditGuardScreen.route){
             AddEditGuardScreen(
                 navController = navController,
-                scaffoldState = scaffoldState
+                scaffoldState = scaffoldState,
             )
         }
     }
