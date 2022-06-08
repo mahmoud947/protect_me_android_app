@@ -1,13 +1,16 @@
 package com.example.productme.di
 
+import android.app.Application
 import com.example.productme.core.comm.Constants
 import com.example.productme.core.util.network.BasicAuthInterceptor
-import com.example.productme.service.ptotect_me.data.remote.TwilioApi
-import com.example.productme.service.ptotect_me.data.repository.ProtectMeServiceRepositoryImpl
-import com.example.productme.service.ptotect_me.domain.repository.ProtectMeServiceRepository
+import com.example.productme.core.util.network.ConnectivityLiveData
+import com.example.productme.service.protect_me.data.remote.TwilioApi
+import com.example.productme.service.protect_me.data.repository.ProtectMeServiceRepositoryImpl
+import com.example.productme.service.protect_me.domain.repository.ProtectMeServiceRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

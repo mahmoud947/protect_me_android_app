@@ -1,4 +1,4 @@
-package com.example.productme.service.ptotect_me.data.remote.request
+package com.example.productme.service.protect_me.data.remote.request
 
 data class SendMessageReqBody(
     val To:String,

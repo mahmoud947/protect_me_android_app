@@ -1,9 +1,9 @@
-package com.example.productme.service.ptotect_me.data.repository
+package com.example.productme.service.protect_me.data.repository
 
-import com.example.productme.service.ptotect_me.data.remote.TwilioApi
-import com.example.productme.service.ptotect_me.data.remote.request.SendMessageReqBody
-import com.example.productme.service.ptotect_me.data.remote.response.MessageSentRes
-import com.example.productme.service.ptotect_me.domain.repository.ProtectMeServiceRepository
+import com.example.productme.service.protect_me.data.remote.TwilioApi
+import com.example.productme.service.protect_me.data.remote.request.SendMessageReqBody
+import com.example.productme.service.protect_me.data.remote.response.MessageSentRes
+import com.example.productme.service.protect_me.domain.repository.ProtectMeServiceRepository
 import javax.inject.Inject
 
 class ProtectMeServiceRepositoryImpl @Inject constructor(

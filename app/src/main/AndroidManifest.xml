@@ -3,6 +3,8 @@
     package="com.example.productme">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
@@ -24,8 +26,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".service.ptotect_me.service.ProtectMeService"
-            android:foregroundServiceType="location"/>
+        <service android:name=".service.protect_me.service.ProtectMeService"
+            android:exported="false"
+            android:stopWithTask="false"
+            />
 
     </application>
 

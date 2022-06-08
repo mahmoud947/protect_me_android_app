@@ -1,6 +1,6 @@
-package com.example.productme.service.ptotect_me.service
+package com.example.productme.service.protect_me.utils
 
-import com.example.productme.service.ptotect_me.data.remote.request.SendMessageReqBody
+import com.example.productme.service.protect_me.data.remote.request.SendMessageReqBody
 
 object ProtectMeServiceComm {
     //Service constants

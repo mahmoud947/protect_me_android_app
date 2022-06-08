@@ -1,4 +1,4 @@
-package com.example.productme.service.ptotect_me.data.remote.response
+package com.example.productme.service.protect_me.data.remote.response
 
 data class MessageSentRes(
     val account_sid: String,

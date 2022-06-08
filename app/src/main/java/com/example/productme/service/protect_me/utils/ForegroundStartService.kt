@@ -1,9 +1,9 @@
-package com.example.productme.service.ptotect_me.utils
+package com.example.productme.service.protect_me.utils
 
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import com.example.productme.service.ptotect_me.service.ProtectMeService
+import com.example.productme.service.protect_me.service.ProtectMeService
 
 //fun Context.foregroundStartService(command: String) {
 //    val intent = Intent(this, MakeItService::class.java)

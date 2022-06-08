@@ -20,10 +20,8 @@ import com.example.curativepis.ui.theme.spacing
 import com.example.productme.R
 import com.example.productme.core.presentaion.components.ButtonWithElevation
 import com.example.productme.core.presentaion.components.DefaultTopAppBar
-import com.example.productme.core.presentaion.navigation.Screens
-import com.example.productme.service.ptotect_me.service.ProtectMeServiceComm
-import com.example.productme.service.ptotect_me.utils.sendCommandToService
-import com.example.productme.ui.theme.darkBlue
+import com.example.productme.service.protect_me.utils.ProtectMeServiceComm
+import com.example.productme.service.protect_me.utils.sendCommandToService
 import com.example.productme.ui.theme.green
 import com.example.productme.ui.theme.orange
 import com.google.accompanist.systemuicontroller.rememberSystemUiController

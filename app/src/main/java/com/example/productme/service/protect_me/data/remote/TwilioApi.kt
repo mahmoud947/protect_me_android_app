@@ -1,6 +1,6 @@
-package com.example.productme.service.ptotect_me.data.remote
+package com.example.productme.service.protect_me.data.remote
 
-import com.example.productme.service.ptotect_me.data.remote.response.MessageSentRes
+import com.example.productme.service.protect_me.data.remote.response.MessageSentRes
 import retrofit2.http.*
 
 interface TwilioApi {
