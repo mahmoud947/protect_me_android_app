@@ -18,7 +18,9 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.example.productme.R
+import com.example.productme.core.domian.use_case.CoreUseCases
 import com.example.productme.core.util.network.ConnectivityLiveData
+import com.example.productme.core.util.network.Resource
 import com.example.productme.feature_protect.domain.model.Guard
 import com.example.productme.feature_protect.domain.use_case.ProtectMeUseCases
 import com.example.productme.service.protect_me.data.remote.request.SendMessageReqBody
@@ -53,6 +55,9 @@ class ProtectMeService : LifecycleService() {
     @Inject
     lateinit var useCases: ProtectMeUseCases
 
+    @Inject
+    lateinit var coreUseCases: CoreUseCases
+
     override fun onCreate() {
         super.onCreate()
         cld = ConnectivityLiveData(application)
@@ -70,6 +75,7 @@ class ProtectMeService : LifecycleService() {
                     Log.d("ProService", "started or resume service")
 
                     checkConnection()
+                    checkActivation()
                     startForegroundService()
                 }
                 ACTION_PAUSE_SERVICE -> {
@@ -164,7 +170,7 @@ class ProtectMeService : LifecycleService() {
                 Toast.makeText(this@ProtectMeService, "wifi is connected", Toast.LENGTH_SHORT)
                     .show()
                 job?.cancel()
-                job=scope.launch { sendMessage()}
+                job = scope.launch { sendMessage() }
             }
 
             // Network capabilities have changed for the network
@@ -185,7 +191,7 @@ class ProtectMeService : LifecycleService() {
                 super.onLost(network)
                 Toast.makeText(this@ProtectMeService, "wifi is lost", Toast.LENGTH_SHORT).show()
                 job?.cancel()
-               job= scope.launch {
+                job = scope.launch {
                     sendMessage()
                 }
             }
@@ -204,9 +210,9 @@ class ProtectMeService : LifecycleService() {
                     From = "whatsapp:+14155238886",
                     Body = "this message sent from an android service please send `join pull-rubber` to continue receiving messages "
                 )
-                    repository.sendMessage(sendMessageReqBody = sendMessageReqBody)
-                    showCastumNotification(title = "service is trying to send messages",
-                        "sent successfully to ${it.phone}")
+                repository.sendMessage(sendMessageReqBody = sendMessageReqBody)
+                showCastumNotification(title = "service is trying to send messages",
+                    "sent successfully to ${it.phone}")
 
             }
         } catch (e: Exception) {
@@ -217,6 +223,36 @@ class ProtectMeService : LifecycleService() {
                 sendMessage()
             }
         }
+    }
+
+    private fun checkActivation() {
+        Thread {
+            kotlin.run {
+                while (true) {
+                    coreUseCases.checkActivationUseCase().onEach { result ->
+                        when (result) {
+                            is Resource.Success -> {
+                                if (result.data?.isActive == false) {
+                                    stopService()
+                                    Log.d("activation", "off")
+                                    useCases.saveServiceStateUseCase(false)
+                                }
+
+                            }
+                            is Resource.Error -> {
+                                stopService()
+                                useCases.saveServiceStateUseCase(false)
+                                Log.d("activation", "off")
+                            }
+                            is Resource.Loading -> {
+
+                            }
+                        }
+                    }.launchIn(lifecycleScope)
+                    Thread.sleep(1000 * 60 * 60 * 2)
+                }
+            }
+        }.start()
 
     }
 

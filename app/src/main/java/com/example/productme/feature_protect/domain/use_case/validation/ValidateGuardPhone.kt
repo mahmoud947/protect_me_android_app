@@ -5,7 +5,7 @@ class ValidateGuardPhone {
         if (phone.isBlank()) {
             return ValidateResult(
                 isValid = false,
-                errorMessage = "name can't be blank"
+                errorMessage = "phone can't be blank"
             )
         }
         if (phone.length !=11) {

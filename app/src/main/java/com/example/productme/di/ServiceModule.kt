@@ -26,7 +26,7 @@ object ServiceModule {
     @Singleton
     fun provideHttpClint():OkHttpClient=
         OkHttpClient.Builder()
-            .addInterceptor(BasicAuthInterceptor(user = "AC221e7596abcc96312798a567a4349380", password = "40aa2fde202bb0640aee8a400f83cac6"))
+            .addInterceptor(BasicAuthInterceptor(user = "", password = ""))
             .connectTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10,TimeUnit.SECONDS)
             .build()

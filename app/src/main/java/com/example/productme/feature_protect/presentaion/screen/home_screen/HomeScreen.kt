@@ -1,6 +1,5 @@
 package com.example.productme.feature_protect.presentaion.screen.home_screen
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -22,7 +21,6 @@ import com.example.productme.R
 import com.example.productme.core.presentaion.components.ButtonWithElevation
 import com.example.productme.core.presentaion.components.DefaultTopAppBar
 import com.example.productme.core.presentaion.navigation.Screens
-import com.example.productme.feature_protect.presentaion.screen.add_edit_guard.AddEditGuardViewModel
 import com.example.productme.service.protect_me.utils.ProtectMeServiceComm
 import com.example.productme.service.protect_me.utils.sendCommandToService
 import com.example.productme.ui.theme.green
@@ -57,8 +55,6 @@ fun HomeScreen(
     }
 
     val scope = rememberCoroutineScope()
-
-
 
     LaunchedEffect(key1 = true) {
         viewModel.validationEvent.collect { event ->
@@ -113,6 +109,15 @@ fun HomeScreen(
             Text(text = stateText.value,
                 style = MaterialTheme.typography.h5,
                 color = if (state.isServiceEnable) green else orange)
+
+            if (!state.isGuardFound) {
+                Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+                Text(text = "please add guard to start service",
+                    style = MaterialTheme.typography.body1,
+                    color = MaterialTheme.colors.error)
+            }
+
+
         }
 
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
@@ -126,8 +131,27 @@ fun HomeScreen(
             colors = SwitchDefaults.colors(
                 checkedThumbColor = green,
                 uncheckedThumbColor = orange
-            )
+            ),
+            enabled = state.isActive ?: false && state.isGuardFound
         )
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(all = 30.dp),
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(text = "Note: ",
+                style = MaterialTheme.typography.h5,
+                color = MaterialTheme.colors.error)
+            Text(
+                text = "You are using the beta which will be turned off at the end of the day, thank you",
+                style = MaterialTheme.typography.h5,
+                color = MaterialTheme.colors.onBackground
+            )
+        }
+
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.xLarge))
 
         ButtonWithElevation(

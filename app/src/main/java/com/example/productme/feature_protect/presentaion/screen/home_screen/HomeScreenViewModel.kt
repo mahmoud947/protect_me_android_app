@@ -37,7 +37,15 @@ class HomeScreenViewModel @Inject constructor(
             isServiceEnable = isServiceEnable
         )
         checkValidation()
+        isGuardListEmpty()
     }
+
+    private fun isGuardListEmpty(){
+        useCases.getGuardsUseCase().onEach {
+               uiState=uiState.copy(isGuardFound = it.isNotEmpty())
+        }.launchIn(viewModelScope)
+    }
+
 
     private fun checkValidation() {
        coreUseCases.checkActivationUseCase().onEach { result ->
